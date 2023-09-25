@@ -1,18 +1,17 @@
 package ru.spbu.apcyb.svp.tasks.task1;
 
 /**
- * Задание 1.
+ * Task 1.
  */
 public class Task1 {
 
+  /**
+   * Entry point for solution of Task 1.
+   */
   public static void main(String[] args) {
 
-    try {
-      ChangeMachine machine = new ChangeMachine();
-      machine.countChangeOptions();
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-    }
+    ChangeMachine machine = new ChangeMachine();
+    machine.countChangeOptions();
   }
 
 }

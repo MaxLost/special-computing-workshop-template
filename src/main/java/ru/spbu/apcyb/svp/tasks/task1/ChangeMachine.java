@@ -7,27 +7,33 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+/**
+ * Class that implements solution for coin change problem with search of combinations for change.
+ */
 public class ChangeMachine {
 
   private final int sum;
   private final int[] coins;
 
-  public ChangeMachine() throws Exception {
+  /**
+   * Constructor that initializes problem from standard input.
+   */
+  public ChangeMachine() {
 
     try (Scanner input = new Scanner(System.in)) {
 
-      System.out.println("Введите сумму для размена:");
-      this.sum = input.nextInt();
+      System.out.println("Enter amount of money for change:");
+      String sumAsString = input.nextLine();
+      this.sum = Integer.parseInt(sumAsString);
       if (sum < 0) {
-        throw new Exception("Сумма для размена не может быть отрицательной.");
+        throw new RuntimeException("Amount for change cannot be negative.");
       }
-      input.nextLine();
 
-      System.out.println("Введите номиналы для размена:");
+      System.out.println("Enter available denominations for change:");
       String[] coinsAsStrings = input.nextLine().split(" ");
 
       if (coinsAsStrings.length == 0) {
-        throw new Exception("Укажите хотя бы один номинал для размена.");
+        throw new RuntimeException("There should be at least 1 available denomination for change.");
       }
 
       this.coins = new int[coinsAsStrings.length];
@@ -39,6 +45,11 @@ public class ChangeMachine {
 
   }
 
+  /**
+   * Method for solving coin change problem.
+   *
+   * @return Amount of change combinations and unique set of such combinations in standard output.
+   */
   public int countChangeOptions() {
 
     List<int[]> changeOptions = getChangeOptions(sum);
@@ -50,7 +61,8 @@ public class ChangeMachine {
     }
 
     List<String> optionsAsStrings = convertOptionsToString(uniqueOptions);
-    System.out.println("Количество комбинаций: " + optionsAsStrings.size());
+    System.out.println(
+        "Amount of change combinations: " + optionsAsStrings.size() + "\nCombinations:");
     for (String option : optionsAsStrings) {
       System.out.println(option);
     }
