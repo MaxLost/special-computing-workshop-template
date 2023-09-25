@@ -1,33 +1,60 @@
 package ru.spbu.apcyb.svp.tasks;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.ByteArrayInputStream;
 import org.junit.jupiter.api.Test;
 import ru.spbu.apcyb.svp.tasks.task1.ChangeMachine;
 
 /**
  * Тесты для задания 1.
  */
-public class Task1Test {
+class Task1Test {
 
   @Test
-  public void test1() {
+  void test1() {
 
-    int sum = 5;
-    int[] coins = new int[]{3, 2};
-    ChangeMachine machine = new ChangeMachine(sum, coins);
-    int changeOptions = machine.countChangeOptions();
-    assertEquals(1, changeOptions);
+    System.setIn(new ByteArrayInputStream("5\n3 2".getBytes()));
+
+    try {
+
+      ChangeMachine machine = new ChangeMachine();
+      int changeOptions = machine.countChangeOptions();
+      assertEquals(1, changeOptions);
+
+    } catch (Exception e) {
+      fail();
+    }
   }
 
   @Test
-  public void test2() {
+  void test2() {
 
-    int sum = 4;
-    int[] coins = new int[]{2, 1};
-    ChangeMachine machine = new ChangeMachine(sum, coins);
-    int changeOptions = machine.countChangeOptions();
-    assertEquals(3, changeOptions);
+    System.setIn(new ByteArrayInputStream("4\n2 1".getBytes()));
+
+    try {
+
+      ChangeMachine machine = new ChangeMachine();
+      int changeOptions = machine.countChangeOptions();
+      assertEquals(3, changeOptions);
+
+    } catch (Exception e) {
+      fail();
+    }
+  }
+
+  @Test
+  void test3() {
+
+    System.setIn(new ByteArrayInputStream("-1\n2 1".getBytes()));
+
+    try {
+      ChangeMachine machine = new ChangeMachine();
+      fail();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
   }
 
 }
