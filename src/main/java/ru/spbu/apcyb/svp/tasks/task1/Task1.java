@@ -7,10 +7,12 @@ public class Task1 {
 
   public static void main(String[] args) {
 
-    ChangeMachine machine = new ChangeMachine();
-    machine.countChangeOptions();
+    try {
+      ChangeMachine machine = new ChangeMachine();
+      machine.countChangeOptions();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
   }
-
-
 
 }

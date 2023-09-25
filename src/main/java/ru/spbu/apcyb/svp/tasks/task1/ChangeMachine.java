@@ -6,28 +6,30 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ChangeMachine {
 
   private final int sum;
   private final int[] coins;
-  private final Logger logger;
 
-  public ChangeMachine() {
-
-    logger = Logger.getLogger(String.valueOf(ChangeMachine.class));
-    logger.setLevel(Level.INFO);
+  public ChangeMachine() throws Exception {
 
     try (Scanner input = new Scanner(System.in)) {
 
       System.out.println("Введите сумму для размена:");
       this.sum = input.nextInt();
+      if (sum < 0) {
+        throw new Exception("Сумма для размена не может быть отрицательной.");
+      }
       input.nextLine();
 
       System.out.println("Введите номиналы для размена:");
       String[] coinsAsStrings = input.nextLine().split(" ");
+
+      if (coinsAsStrings.length == 0) {
+        throw new Exception("Укажите хотя бы один номинал для размена.");
+      }
+
       this.coins = new int[coinsAsStrings.length];
 
       for (int i = 0; i < coinsAsStrings.length; i++) {
@@ -35,15 +37,6 @@ public class ChangeMachine {
       }
     }
 
-  }
-
-  public ChangeMachine(int sum, int[] coins) {
-
-    logger = Logger.getLogger(String.valueOf(ChangeMachine.class));
-    logger.setLevel(Level.INFO);
-
-    this.sum = sum;
-    this.coins = coins;
   }
 
   public int countChangeOptions() {
