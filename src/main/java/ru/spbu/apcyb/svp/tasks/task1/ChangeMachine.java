@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class that implements solution for coin change problem with search of combinations for change.
@@ -23,32 +26,80 @@ public class ChangeMachine {
     try (Scanner input = new Scanner(System.in)) {
 
       System.out.println("Enter amount of money for change:");
-      String sumAsString = input.nextLine();
-      this.sum = Integer.parseInt(sumAsString);
-      if (sum < 0) {
-        throw new RuntimeException("Amount for change cannot be negative.");
-      }
+      this.sum = getAmountForChangeFromInput(input);
 
       System.out.println("Enter available denominations for change:");
-      String[] coinsAsStrings = input.nextLine().split(" ");
+      this.coins = getChangeOptionsFromInput(input);
+    }
 
-      if (coinsAsStrings.length == 0) {
-        throw new RuntimeException("There should be at least 1 available denomination for change.");
-      }
+  }
 
-      this.coins = new int[coinsAsStrings.length];
+  private static int getAmountForChangeFromInput(Scanner input) {
 
-      for (int i = 0; i < coinsAsStrings.length; i++) {
-        this.coins[i] = Integer.parseInt(coinsAsStrings[i]);
+    String sumAsString = null;
+    int sum;
+
+    try {
+      sumAsString = input.nextLine();
+      sum = Integer.parseInt(sumAsString);
+
+    } catch (NoSuchElementException e) {
+      throw new RuntimeException("Incorrect input.");
+
+    } catch (NumberFormatException e) {
+      Pattern integerPattern = Pattern.compile("\\d");
+      Matcher matcher = integerPattern.matcher(sumAsString);
+      if (matcher.find()) {
+        throw new RuntimeException("Only non-negative integer amount supported.");
+      } else {
+        throw new RuntimeException("Amount for change should be a non-negative integer.");
       }
     }
 
+    if (sum < 0) {
+      throw new RuntimeException("Amount for change cannot be negative.");
+    }
+
+    return sum;
+  }
+
+  private static int[] getChangeOptionsFromInput(Scanner input) {
+
+    String[] coinsAsStrings = input.nextLine().split(" ");
+
+    if (coinsAsStrings.length == 0) {
+      throw new RuntimeException("There should be at least 1 available denomination for change.");
+    }
+
+    int[] coins = new int[coinsAsStrings.length];
+
+    for (int i = 0; i < coinsAsStrings.length; i++) {
+      try {
+        coins[i] = Integer.parseInt(coinsAsStrings[i]);
+        if (coins[i] <= 0) {
+          throw new RuntimeException("Change options should be positive.");
+        }
+
+      } catch (NumberFormatException e) {
+        Pattern integerPattern = Pattern.compile("\\d");
+        Matcher matcher = integerPattern.matcher(coinsAsStrings[i]);
+
+        if (matcher.find()) {
+          throw new RuntimeException("Only positive integers supported as change options.");
+        } else {
+          throw new RuntimeException("Change options should be positive integers.");
+        }
+      }
+    }
+
+    return coins;
   }
 
   /**
    * Method for solving coin change problem.
    *
-   * @return Amount of change combinations and unique set of such combinations in standard output.
+   * @return Amount of change combinations as value of function and in standard output, and unique
+   *        set of such combinations in standard output.
    */
   public int countChangeOptions() {
 
