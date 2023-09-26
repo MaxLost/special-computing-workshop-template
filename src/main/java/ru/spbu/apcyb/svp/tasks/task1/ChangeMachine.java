@@ -36,28 +36,27 @@ public class ChangeMachine {
 
   private static int getAmountForChangeFromInput(Scanner input) {
 
-    String sumAsString = null;
     int sum;
-
     try {
-      sumAsString = input.nextLine();
-      sum = Integer.parseInt(sumAsString);
+      String sumAsString = input.nextLine();
+
+      Pattern integerPattern = Pattern.compile("^\\d*$");
+      Matcher matcher = integerPattern.matcher(sumAsString);
+
+      if (matcher.find()) {
+        sum = Integer.parseInt(sumAsString);
+      } else {
+        throw new RuntimeException("Amount for change should be a positive integer.");
+      }
 
     } catch (NoSuchElementException e) {
       throw new RuntimeException("Incorrect input.");
-
     } catch (NumberFormatException e) {
-      Pattern integerPattern = Pattern.compile("\\d");
-      Matcher matcher = integerPattern.matcher(sumAsString);
-      if (matcher.find()) {
-        throw new RuntimeException("Only non-negative integer amount supported.");
-      } else {
-        throw new RuntimeException("Amount for change should be a non-negative integer.");
-      }
+      throw new RuntimeException("Amount for change should be between 1 and 2 147 483 647.");
     }
 
-    if (sum < 0) {
-      throw new RuntimeException("Amount for change cannot be negative.");
+    if (sum == 0) {
+      throw new RuntimeException("Amount for change should be positive.");
     }
 
     return sum;
@@ -65,7 +64,7 @@ public class ChangeMachine {
 
   private static int[] getChangeOptionsFromInput(Scanner input) {
 
-    String[] coinsAsStrings = input.nextLine().split(" ");
+    String[] coinsAsStrings = input.nextLine().split(" +");
 
     if (coinsAsStrings.length == 0) {
       throw new RuntimeException("There should be at least 1 available denomination for change.");
@@ -75,20 +74,20 @@ public class ChangeMachine {
 
     for (int i = 0; i < coinsAsStrings.length; i++) {
       try {
-        coins[i] = Integer.parseInt(coinsAsStrings[i]);
-        if (coins[i] <= 0) {
-          throw new RuntimeException("Change options should be positive.");
-        }
-
-      } catch (NumberFormatException e) {
-        Pattern integerPattern = Pattern.compile("\\d");
+        Pattern integerPattern = Pattern.compile("^\\d*$");
         Matcher matcher = integerPattern.matcher(coinsAsStrings[i]);
 
         if (matcher.find()) {
-          throw new RuntimeException("Only positive integers supported as change options.");
+          coins[i] = Integer.parseInt(coinsAsStrings[i]);
+          if (coins[i] == 0) {
+            throw new RuntimeException("Change options should be positive.");
+          }
         } else {
-          throw new RuntimeException("Change options should be positive integers.");
+          throw new RuntimeException("Only positive integers supported as change options.");
         }
+
+      } catch (NumberFormatException e) {
+        throw new RuntimeException("Change options should be between 1 and 2 147 483 647.");
       }
     }
 
@@ -103,32 +102,22 @@ public class ChangeMachine {
    */
   public int countChangeOptions() {
 
-    if (sum > 0) {
+    List<int[]> changeOptions = getChangeOptions(sum);
+    HashSet<List<Integer>> uniqueOptions = new HashSet<>();
 
-      List<int[]> changeOptions = getChangeOptions(sum);
-      HashSet<List<Integer>> uniqueOptions = new HashSet<>();
-
-      for (int[] option : changeOptions) {
-        List<Integer> optionAsList = Arrays.stream(option).boxed().toList();
-        uniqueOptions.add(optionAsList);
-      }
-
-      List<String> optionsAsStrings = convertOptionsToString(uniqueOptions);
-      System.out.println(
-          "Amount of change combinations: " + optionsAsStrings.size() + "\nCombinations:");
-      for (String option : optionsAsStrings) {
-        System.out.println(option);
-      }
-
-      return optionsAsStrings.size();
-
-    } else {
-
-      List<String> optionsAsStrings = new ArrayList<>(List.of(" "));
-      System.out.println(
-          "Amount of change combinations: " + optionsAsStrings.size() + "\nCombinations:\n{ }");
-      return 1;
+    for (int[] option : changeOptions) {
+      List<Integer> optionAsList = Arrays.stream(option).boxed().toList();
+      uniqueOptions.add(optionAsList);
     }
+
+    List<String> optionsAsStrings = convertOptionsToString(uniqueOptions);
+    System.out.println(
+        "Amount of change combinations: " + optionsAsStrings.size() + "\nCombinations:");
+    for (String option : optionsAsStrings) {
+      System.out.println(option);
+    }
+
+    return optionsAsStrings.size();
   }
 
   private List<String> convertOptionsToString(Set<List<Integer>> options) {
