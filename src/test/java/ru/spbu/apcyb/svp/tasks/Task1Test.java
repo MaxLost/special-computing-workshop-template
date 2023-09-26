@@ -17,135 +17,96 @@ class Task1Test {
   void testSuccess1() {
 
     System.setIn(new ByteArrayInputStream("5\n3 2".getBytes()));
-
-    try {
-
-      ChangeMachine machine = new ChangeMachine();
-      int changeOptions = machine.countChangeOptions();
-      assertEquals(1, changeOptions);
-
-    } catch (Exception e) {
-      fail();
-    }
+    ChangeMachine machine = new ChangeMachine();
+    int changeOptions = machine.countChangeOptions();
+    assertEquals(1, changeOptions);
   }
 
   @Test
   void testSuccess2() {
 
     System.setIn(new ByteArrayInputStream("4\n2 1".getBytes()));
-
-    try {
-
-      ChangeMachine machine = new ChangeMachine();
-      int changeOptions = machine.countChangeOptions();
-      assertEquals(3, changeOptions);
-
-    } catch (Exception e) {
-      fail();
-    }
+    ChangeMachine machine = new ChangeMachine();
+    int changeOptions = machine.countChangeOptions();
+    assertEquals(3, changeOptions);
   }
 
   @Test
   void testSuccess3() {
 
     System.setIn(new ByteArrayInputStream("40\n25 20 10 5".getBytes()));
+    ChangeMachine machine = new ChangeMachine();
+    int changeOptions = machine.countChangeOptions();
+    assertEquals(11, changeOptions);
+  }
 
-    try {
+  private void exceptionThrowingTest(String inputString, String expectedExceptionMessage) {
 
+    System.setIn(new ByteArrayInputStream(inputString.getBytes()));
+    Exception e = assertThrows(RuntimeException.class, () -> {
       ChangeMachine machine = new ChangeMachine();
-      int changeOptions = machine.countChangeOptions();
-      assertEquals(11, changeOptions);
-
-    } catch (Exception e) {
-      fail();
-    }
+    });
+    assertEquals(expectedExceptionMessage, e.getMessage());
   }
 
   @Test
   void testChangeZero() {
-
-    System.setIn(new ByteArrayInputStream("0\n25 20 10 5".getBytes()));
-
-    try {
-
-      ChangeMachine machine = new ChangeMachine();
-      int changeOptions = machine.countChangeOptions();
-      assertEquals(1, changeOptions);
-
-    } catch (Exception e) {
-      fail();
-    }
+    exceptionThrowingTest("0\n25 20 10 5",
+        "Amount for change should be positive.");
   }
 
   @Test
   void testNegativeAmountForChange() {
-
-    System.setIn(new ByteArrayInputStream("-1\n2 1".getBytes()));
-
-    try {
-      ChangeMachine machine = new ChangeMachine();
-      fail();
-    } catch (RuntimeException e) {
-      assertEquals("Amount for change cannot be negative.", e.getMessage());
-    }
+    exceptionThrowingTest("-1\n2 1",
+        "Amount for change should be a positive integer.");
   }
 
   @Test
-  void testTooFewChangeOptions() {
-
-    System.setIn(new ByteArrayInputStream("5\n ".getBytes()));
-
-    try {
-      ChangeMachine machine = new ChangeMachine();
-      fail();
-    } catch (RuntimeException e) {
-      assertEquals("There should be at least 1 available denomination for change.", e.getMessage());
-    }
+  void testAmountForChangeIsNotPositiveInteger() {
+    exceptionThrowingTest("abc\n2 1",
+        "Amount for change should be a positive integer.");
   }
 
   @Test
-  void testInvalidAmountInput() {
-
-    System.setIn(new ByteArrayInputStream("f\n ".getBytes()));
-    assertThrows(RuntimeException.class, () -> {
-      ChangeMachine machine = new ChangeMachine();
-    }, "Amount for change should be a non-negative integer.");
+  void testAmountForChangeAsExpression() {
+    exceptionThrowingTest("3+2\n2 1",
+        "Amount for change should be a positive integer.");
   }
 
   @Test
-  void testInvalidChangeOptionsInput() {
-
-    System.setIn(new ByteArrayInputStream("5\nf".getBytes()));
-    assertThrows(RuntimeException.class, () -> {
-      ChangeMachine machine = new ChangeMachine();
-    }, "Change options should be positive integers.");
+  void testEmptyAmountForChangeInput() {
+    exceptionThrowingTest("",
+        "Incorrect input.");
   }
 
   @Test
   void testTooLargeAmountForChange() {
+    exceptionThrowingTest("3000000000\n2 1",
+        "Amount for change should be between 1 and 2 147 483 647.");
+  }
 
-    System.setIn(new ByteArrayInputStream("3000000000\n2 1".getBytes()));
-    assertThrows(RuntimeException.class, () -> {
-      ChangeMachine machine = new ChangeMachine();
-    }, "Only non-negative integer amount supported.");
+  @Test
+  void testTooFewChangeOptions() {
+    exceptionThrowingTest("5\n ",
+        "There should be at least 1 available denomination for change.");
+  }
+
+  @Test
+  void testInvalidChangeOptionsInput() {
+    exceptionThrowingTest("5\nf",
+        "Only positive integers supported as change options.");
   }
 
   @Test
   void testNegativeChangeOption() {
-
-    System.setIn(new ByteArrayInputStream("30\n-2 1".getBytes()));
-    assertThrows(RuntimeException.class, () -> {
-      ChangeMachine machine = new ChangeMachine();
-    }, "Change options should be positive.");
+    exceptionThrowingTest("30\n-2 1",
+        "Only positive integers supported as change options.");
   }
 
   @Test
   void testTooLargeChangeOption() {
-
-    System.setIn(new ByteArrayInputStream("1000\n3000000000 1".getBytes()));
-    assertThrows(RuntimeException.class, () -> {
-      ChangeMachine machine = new ChangeMachine();
-    }, "Change options should be positive.");
+    exceptionThrowingTest("1000\n3000000000 1",
+        "Change options should be between 1 and 2 147 483 647.");
   }
 
 }
