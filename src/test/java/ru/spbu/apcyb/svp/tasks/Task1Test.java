@@ -107,18 +107,45 @@ class Task1Test {
   void testInvalidAmountInput() {
 
     System.setIn(new ByteArrayInputStream("f\n ".getBytes()));
-    assertThrows(NumberFormatException.class, () -> {
+    assertThrows(RuntimeException.class, () -> {
       ChangeMachine machine = new ChangeMachine();
-    });
+    }, "Amount for change should be a non-negative integer.");
   }
 
   @Test
   void testInvalidChangeOptionsInput() {
 
     System.setIn(new ByteArrayInputStream("5\nf".getBytes()));
-    assertThrows(NumberFormatException.class, () -> {
+    assertThrows(RuntimeException.class, () -> {
       ChangeMachine machine = new ChangeMachine();
-    });
+    }, "Change options should be positive integers.");
+  }
+
+  @Test
+  void testTooLargeAmountForChange() {
+
+    System.setIn(new ByteArrayInputStream("3000000000\n2 1".getBytes()));
+    assertThrows(RuntimeException.class, () -> {
+      ChangeMachine machine = new ChangeMachine();
+    }, "Only non-negative integer amount supported.");
+  }
+
+  @Test
+  void testNegativeChangeOption() {
+
+    System.setIn(new ByteArrayInputStream("30\n-2 1".getBytes()));
+    assertThrows(RuntimeException.class, () -> {
+      ChangeMachine machine = new ChangeMachine();
+    }, "Change options should be positive.");
+  }
+
+  @Test
+  void testTooLargeChangeOption() {
+
+    System.setIn(new ByteArrayInputStream("1000\n3000000000 1".getBytes()));
+    assertThrows(RuntimeException.class, () -> {
+      ChangeMachine machine = new ChangeMachine();
+    }, "Change options should be positive.");
   }
 
 }
