@@ -52,7 +52,7 @@ class Task1Test {
   @Test
   void testChangeZero() {
     exceptionThrowingTest("0\n25 20 10 5",
-        "Amount for change should be positive.");
+        "Amount for change should be a positive integer.");
   }
 
   @Test
