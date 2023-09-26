@@ -40,7 +40,7 @@ public class ChangeMachine {
     try {
       String sumAsString = input.nextLine();
 
-      Pattern integerPattern = Pattern.compile("^\\d*$");
+      Pattern integerPattern = Pattern.compile("^[1-9]\\d*$");
       Matcher matcher = integerPattern.matcher(sumAsString);
 
       if (matcher.find()) {
@@ -55,16 +55,12 @@ public class ChangeMachine {
       throw new RuntimeException("Amount for change should be between 1 and 2 147 483 647.");
     }
 
-    if (sum == 0) {
-      throw new RuntimeException("Amount for change should be positive.");
-    }
-
     return sum;
   }
 
   private static int[] getChangeOptionsFromInput(Scanner input) {
 
-    String[] coinsAsStrings = input.nextLine().split(" +");
+    String[] coinsAsStrings = input.nextLine().split(" *");
 
     if (coinsAsStrings.length == 0) {
       throw new RuntimeException("There should be at least 1 available denomination for change.");
@@ -74,14 +70,11 @@ public class ChangeMachine {
 
     for (int i = 0; i < coinsAsStrings.length; i++) {
       try {
-        Pattern integerPattern = Pattern.compile("^\\d*$");
+        Pattern integerPattern = Pattern.compile("^[1-9]\\d*$");
         Matcher matcher = integerPattern.matcher(coinsAsStrings[i]);
 
         if (matcher.find()) {
           coins[i] = Integer.parseInt(coinsAsStrings[i]);
-          if (coins[i] == 0) {
-            throw new RuntimeException("Change options should be positive.");
-          }
         } else {
           throw new RuntimeException("Only positive integers supported as change options.");
         }
