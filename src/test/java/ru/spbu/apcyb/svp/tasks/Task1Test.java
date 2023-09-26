@@ -62,6 +62,22 @@ class Task1Test {
   }
 
   @Test
+  void testChangeZero() {
+
+    System.setIn(new ByteArrayInputStream("0\n25 20 10 5".getBytes()));
+
+    try {
+
+      ChangeMachine machine = new ChangeMachine();
+      int changeOptions = machine.countChangeOptions();
+      assertEquals(1, changeOptions);
+
+    } catch (Exception e) {
+      fail();
+    }
+  }
+
+  @Test
   void testNegativeAmountForChange() {
 
     System.setIn(new ByteArrayInputStream("-1\n2 1".getBytes()));

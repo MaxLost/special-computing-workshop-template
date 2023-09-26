@@ -52,22 +52,32 @@ public class ChangeMachine {
    */
   public int countChangeOptions() {
 
-    List<int[]> changeOptions = getChangeOptions(sum);
-    HashSet<List<Integer>> uniqueOptions = new HashSet<>();
+    if (sum > 0) {
 
-    for (int[] option : changeOptions) {
-      List<Integer> optionAsList = Arrays.stream(option).boxed().toList();
-      uniqueOptions.add(optionAsList);
+      List<int[]> changeOptions = getChangeOptions(sum);
+      HashSet<List<Integer>> uniqueOptions = new HashSet<>();
+
+      for (int[] option : changeOptions) {
+        List<Integer> optionAsList = Arrays.stream(option).boxed().toList();
+        uniqueOptions.add(optionAsList);
+      }
+
+      List<String> optionsAsStrings = convertOptionsToString(uniqueOptions);
+      System.out.println(
+          "Amount of change combinations: " + optionsAsStrings.size() + "\nCombinations:");
+      for (String option : optionsAsStrings) {
+        System.out.println(option);
+      }
+
+      return optionsAsStrings.size();
+
+    } else {
+
+      List<String> optionsAsStrings = new ArrayList<>(List.of(" "));
+      System.out.println(
+          "Amount of change combinations: " + optionsAsStrings.size() + "\nCombinations:\n{ }");
+      return 1;
     }
-
-    List<String> optionsAsStrings = convertOptionsToString(uniqueOptions);
-    System.out.println(
-        "Amount of change combinations: " + optionsAsStrings.size() + "\nCombinations:");
-    for (String option : optionsAsStrings) {
-      System.out.println(option);
-    }
-
-    return optionsAsStrings.size();
   }
 
   private List<String> convertOptionsToString(Set<List<Integer>> options) {
@@ -75,14 +85,14 @@ public class ChangeMachine {
     List<String> result = new ArrayList<>();
 
     for (List<Integer> option : options) {
-      StringBuilder optionAsString = new StringBuilder();
+      StringBuilder optionAsString = new StringBuilder("{");
       for (int i = 0; i < option.size(); i++) {
         for (int j = 0; j < option.get(i); j++) {
           optionAsString.append(coins[i]).append(", ");
         }
       }
       int lastCommaIndex = optionAsString.lastIndexOf(",");
-      result.add(optionAsString.substring(0, lastCommaIndex));
+      result.add(optionAsString.substring(0, lastCommaIndex) + "}");
     }
 
     return result;
