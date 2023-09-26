@@ -97,13 +97,17 @@ public class ChangeMachine {
       for (int i = 0; i < coins.length; i++) {
 
         if (s == coins[i]) {
+
           int[] newCombination = new int[coins.length];
           newCombination[i] += 1;
           combinations.add(newCombination);
         } else {
-          int j = i;
+
           List<int[]> previousCombinations = getChangeOptions(s - coins[i]);
-          previousCombinations.forEach(combination -> combination[j] += 1);
+
+          for (int[] combination : previousCombinations) {
+            combination[i]++;
+          }
           combinations.addAll(previousCombinations);
         }
       }
