@@ -52,31 +52,31 @@ class Task1Test {
   @Test
   void testChangeZero() {
     exceptionThrowingTest("0\n25 20 10 5",
-        "Amount for change should be a positive integer.");
+        "Amount for change should be a single positive integer.");
   }
 
   @Test
   void testNegativeAmountForChange() {
     exceptionThrowingTest("-1\n2 1",
-        "Amount for change should be a positive integer.");
+        "Amount for change should be a single positive integer.");
   }
 
   @Test
   void testAmountForChangeIsNotPositiveInteger() {
     exceptionThrowingTest("abc\n2 1",
-        "Amount for change should be a positive integer.");
+        "Amount for change should be a single positive integer.");
   }
 
   @Test
   void testAmountForChangeAsExpression() {
     exceptionThrowingTest("3+2\n2 1",
-        "Amount for change should be a positive integer.");
+        "Amount for change should be a single positive integer.");
   }
 
   @Test
   void testEmptyAmountForChangeInput() {
     exceptionThrowingTest("",
-        "Incorrect input.");
+        "Input cannot be empty.");
   }
 
   @Test

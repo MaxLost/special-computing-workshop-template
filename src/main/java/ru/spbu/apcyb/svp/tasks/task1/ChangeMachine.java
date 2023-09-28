@@ -46,11 +46,11 @@ public class ChangeMachine {
       if (matcher.find()) {
         sum = Integer.parseInt(sumAsString);
       } else {
-        throw new RuntimeException("Amount for change should be a positive integer.");
+        throw new RuntimeException("Amount for change should be a single positive integer.");
       }
 
     } catch (NoSuchElementException e) {
-      throw new RuntimeException("Incorrect input.");
+      throw new RuntimeException("Input cannot be empty.");
     } catch (NumberFormatException e) {
       throw new RuntimeException("Amount for change should be between 1 and 2 147 483 647.");
     }
@@ -60,7 +60,7 @@ public class ChangeMachine {
 
   private static int[] getChangeOptionsFromInput(Scanner input) {
 
-    String[] coinsAsStrings = input.nextLine().split(" *");
+    String[] coinsAsStrings = input.nextLine().split(" +");
 
     if (coinsAsStrings.length == 0) {
       throw new RuntimeException("There should be at least 1 available denomination for change.");
