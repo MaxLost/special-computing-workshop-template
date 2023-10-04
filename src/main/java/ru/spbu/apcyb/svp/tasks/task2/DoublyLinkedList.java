@@ -1,13 +1,13 @@
 package ru.spbu.apcyb.svp.tasks.task2;
 
-import java.lang.invoke.WrongMethodTypeException;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * Implementation of doubly linked list.
+ */
 public class DoublyLinkedList implements List {
 
   private int size = 0;
@@ -95,11 +95,6 @@ public class DoublyLinkedList implements List {
   }
 
   @Override
-  public boolean remove(Object o) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
   public boolean addAll(Collection c) {
     this.addAll(0, c);
     return true;
@@ -124,6 +119,10 @@ public class DoublyLinkedList implements List {
   @Override
   public Object get(int index) {
     isIndexInBounds(index);
+
+    if (this.isEmpty()) {
+      return null;
+    }
 
     Node worker = head;
     for (int i = 0; i < index; i++) {
@@ -166,6 +165,11 @@ public class DoublyLinkedList implements List {
     }
     size--;
     return value;
+  }
+
+  @Override
+  public boolean remove(Object o) {
+    throw new UnsupportedOperationException();
   }
 
   @Override

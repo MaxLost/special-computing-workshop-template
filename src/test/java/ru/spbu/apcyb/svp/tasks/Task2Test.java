@@ -2,6 +2,7 @@ package ru.spbu.apcyb.svp.tasks;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,6 +39,13 @@ public class Task2Test {
     list.add(2);
     Object result = list.get(1);
     assertEquals(2, result);
+  }
+
+  @Test
+  void getFromEmptyListTest() {
+    DoublyLinkedList list = new DoublyLinkedList();
+    Object element = list.get(0);
+    assertNull(element);
   }
 
   @Test
