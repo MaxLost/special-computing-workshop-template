@@ -1,4 +1,4 @@
-package ru.spbu.apcyb.svp.tasks;
+package ru.spbu.apcyb.svp.tasks.task1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
