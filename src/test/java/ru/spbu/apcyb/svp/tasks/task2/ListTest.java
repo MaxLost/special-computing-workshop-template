@@ -9,12 +9,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import ru.spbu.apcyb.svp.tasks.task2.DoublyLinkedList;
 
 /**
- * Тесты для задания 2.
+ * Tests for custom implementation of doubly linked list.
  */
-public class Task2Test {
+class ListTest {
+
+  @Test
+  void emptyListTest() {
+    DoublyLinkedList list = new DoublyLinkedList();
+    assertTrue(list.isEmpty());
+  }
 
   @Test
   void addObjectTest() {
@@ -30,6 +35,19 @@ public class Task2Test {
     list.add(2);
     list.add("123");
     assertEquals(3, list.size());
+    assertTrue(list.addAll(List.of(99, 100)));
+  }
+
+  @Test
+  void addInTheMiddleTest() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of(1, 2, 3));
+    list.add(1, 5);
+    assertEquals(4, list.size());
+    assertEquals(5, list.get(1));
+    list.addAll(1, List.of(9, 8));
+    assertEquals(9, list.get(1));
+    assertEquals(8, list.get(2));
+    assertEquals(6, list.size());
   }
 
   @Test
@@ -140,9 +158,10 @@ public class Task2Test {
   @Test
   void removeFromEmptyListTest() {
     DoublyLinkedList list = new DoublyLinkedList();
-    assertThrows(IndexOutOfBoundsException.class, () -> {
+    Exception e = assertThrows(NullPointerException.class, () -> {
       list.remove(0);
     });
+    assertEquals("Cannot remove element from empty collection.", e.getMessage());
   }
 
   @Test
@@ -157,6 +176,91 @@ public class Task2Test {
     DoublyLinkedList list = new DoublyLinkedList(List.of(1, 5, 8, 4, 3));
     assertTrue(list.containsAll(List.of(5,3)));
     assertFalse(list.containsAll(List.of(0, -15, 9)));
+  }
+
+  @Test
+  void clearTest() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of(1));
+    assertThrows(UnsupportedOperationException.class, list::clear);
+  }
+
+  @Test
+  void setTest() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of(1));
+    assertThrows(UnsupportedOperationException.class, () -> {
+      list.set(0, 5);
+    });
+  }
+
+  @Test
+  void removeObjectTest() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of("12"));
+    assertThrows(UnsupportedOperationException.class, () -> {
+      list.remove("12");
+    });
+  }
+
+  @Test
+  void removeAllTest() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of("12", "21", "5"));
+    assertThrows(UnsupportedOperationException.class, () -> {
+      list.removeAll(List.of("12", "5"));
+    });
+  }
+
+  @Test
+  void lastIndexOfTest() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of("12"));
+    assertThrows(UnsupportedOperationException.class, () -> {
+      list.lastIndexOf("12");
+    });
+  }
+
+  @Test
+  void iteratorTest() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of("12"));
+    assertThrows(UnsupportedOperationException.class, list::iterator);
+  }
+
+  @Test
+  void listIteratorTest() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of("12"));
+    assertThrows(UnsupportedOperationException.class, list::listIterator);
+  }
+
+  @Test
+  void listIteratorIndexTest() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of("12"));
+    assertThrows(UnsupportedOperationException.class, () -> {
+      list.listIterator(0);
+    });
+  }
+
+  @Test
+  void subListTest() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of("12", "1?", "8"));
+    assertThrows(UnsupportedOperationException.class, () -> {
+      list.subList(0, 1);
+    });
+  }
+
+  @Test
+  void retainAllTest() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of("12", "1?", "8"));
+    assertThrows(UnsupportedOperationException.class, () -> {
+      list.retainAll(List.of(0, 1));
+    });
+  }
+
+  @Test
+  void toArrayTest() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of("12", "1?", "8"));
+    Object[] expected = new Object[]{"12", "1?", "8"};
+    Object[] listAsArray = list.toArray();
+    assertEquals(3, listAsArray.length);
+    for (int i = 0; i < 3; i++) {
+      assertEquals(expected[i], listAsArray[i]);
+    }
   }
 
 }

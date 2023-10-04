@@ -1,5 +1,6 @@
 package ru.spbu.apcyb.svp.tasks.task2;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -12,6 +13,10 @@ public class CustomQueue implements java.util.Queue {
 
   public CustomQueue() {
     queue = new DoublyLinkedList();
+  }
+
+  public CustomQueue(Collection c) {
+    queue = new DoublyLinkedList(c);
   }
 
   @Override
@@ -61,7 +66,7 @@ public class CustomQueue implements java.util.Queue {
 
   @Override
   public void clear() {
-    queue.clear();
+    throw new UnsupportedOperationException();
   }
 
   @Override
@@ -78,11 +83,7 @@ public class CustomQueue implements java.util.Queue {
 
   @Override
   public Object remove() {
-    Object first = queue.remove(0);
-    if (first == null) {
-      throw new NullPointerException("Queue is empty.");
-    }
-    return first;
+    return queue.remove(0);
   }
 
   @Override
@@ -97,6 +98,9 @@ public class CustomQueue implements java.util.Queue {
 
   @Override
   public Object poll() {
+    if (queue.isEmpty()) {
+      return null;
+    }
     return queue.remove(0);
   }
 
@@ -112,6 +116,9 @@ public class CustomQueue implements java.util.Queue {
 
   @Override
   public Object peek() {
+    if (queue.isEmpty()) {
+      return null;
+    }
     return queue.get(0);
   }
 }
