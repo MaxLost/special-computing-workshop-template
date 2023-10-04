@@ -158,9 +158,7 @@ class ListTest {
   @Test
   void removeFromEmptyListTest() {
     DoublyLinkedList list = new DoublyLinkedList();
-    Exception e = assertThrows(NullPointerException.class, () -> {
-      list.remove(0);
-    });
+    Exception e = assertThrows(NullPointerException.class, () -> list.remove(0));
     assertEquals("Cannot remove element from empty collection.", e.getMessage());
   }
 
@@ -187,33 +185,25 @@ class ListTest {
   @Test
   void setTest() {
     DoublyLinkedList list = new DoublyLinkedList(List.of(1));
-    assertThrows(UnsupportedOperationException.class, () -> {
-      list.set(0, 5);
-    });
+    assertThrows(UnsupportedOperationException.class, () -> list.set(0, 5));
   }
 
   @Test
   void removeObjectTest() {
     DoublyLinkedList list = new DoublyLinkedList(List.of("12"));
-    assertThrows(UnsupportedOperationException.class, () -> {
-      list.remove("12");
-    });
+    assertThrows(UnsupportedOperationException.class, () -> list.remove("12"));
   }
 
   @Test
   void removeAllTest() {
     DoublyLinkedList list = new DoublyLinkedList(List.of("12", "21", "5"));
-    assertThrows(UnsupportedOperationException.class, () -> {
-      list.removeAll(List.of("12", "5"));
-    });
+    assertThrows(UnsupportedOperationException.class, () -> list.removeAll(List.of("12", "5")));
   }
 
   @Test
   void lastIndexOfTest() {
     DoublyLinkedList list = new DoublyLinkedList(List.of("12"));
-    assertThrows(UnsupportedOperationException.class, () -> {
-      list.lastIndexOf("12");
-    });
+    assertThrows(UnsupportedOperationException.class, () -> list.lastIndexOf("12"));
   }
 
   @Test
@@ -231,25 +221,19 @@ class ListTest {
   @Test
   void listIteratorIndexTest() {
     DoublyLinkedList list = new DoublyLinkedList(List.of("12"));
-    assertThrows(UnsupportedOperationException.class, () -> {
-      list.listIterator(0);
-    });
+    assertThrows(UnsupportedOperationException.class, () -> list.listIterator(0));
   }
 
   @Test
   void subListTest() {
     DoublyLinkedList list = new DoublyLinkedList(List.of("12", "1?", "8"));
-    assertThrows(UnsupportedOperationException.class, () -> {
-      list.subList(0, 1);
-    });
+    assertThrows(UnsupportedOperationException.class, () -> list.subList(0, 1));
   }
 
   @Test
   void retainAllTest() {
     DoublyLinkedList list = new DoublyLinkedList(List.of("12", "1?", "8"));
-    assertThrows(UnsupportedOperationException.class, () -> {
-      list.retainAll(List.of(0, 1));
-    });
+    assertThrows(UnsupportedOperationException.class, () -> list.retainAll(List.of(0, 1)));
   }
 
   @Test

@@ -26,11 +26,10 @@ public class DoublyLinkedList implements List {
     }
   }
 
-  private boolean isIndexInBounds(int index) {
+  private void isIndexInBounds(int index) {
     if (index > size && index < 0) {
       throw new IndexOutOfBoundsException();
     }
-    return true;
   }
 
   public DoublyLinkedList() {}
