@@ -73,9 +73,7 @@ class QueueTest {
   @Test
   void retainAllTest() {
     CustomQueue queue = new CustomQueue();
-    assertThrows(UnsupportedOperationException.class, () -> {
-      queue.retainAll(List.of(1, 2));
-    });
+    assertThrows(UnsupportedOperationException.class, () -> queue.retainAll(List.of(1, 2)));
   }
 
   @Test
@@ -89,17 +87,13 @@ class QueueTest {
   @Test
   void removeObjectTest() {
     CustomQueue queue = new CustomQueue();
-    assertThrows(UnsupportedOperationException.class, () -> {
-      queue.remove(1);
-    });
+    assertThrows(UnsupportedOperationException.class, () -> queue.remove(1));
   }
 
   @Test
   void removeAllTest() {
     CustomQueue queue = new CustomQueue();
-    assertThrows(UnsupportedOperationException.class, () -> {
-      queue.removeAll(List.of(1, 2));
-    });
+    assertThrows(UnsupportedOperationException.class, () -> queue.removeAll(List.of(1, 2)));
   }
 
   @Test
