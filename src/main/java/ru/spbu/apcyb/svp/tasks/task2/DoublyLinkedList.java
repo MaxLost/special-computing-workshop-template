@@ -27,8 +27,8 @@ public class DoublyLinkedList implements List {
   }
 
   private boolean isIndexInBounds(int index) {
-    if (index > size) {
-      throw new ArrayIndexOutOfBoundsException();
+    if (index > size && index < 0) {
+      throw new IndexOutOfBoundsException();
     }
     return true;
   }
@@ -77,10 +77,14 @@ public class DoublyLinkedList implements List {
       Node newNode = new Node(element, tail, null);
       tail.next = newNode;
       tail = newNode;
+    } else if (worker == head) {
+      Node newNode = new Node(element, null, worker);
+      worker.prev = newNode;
+      head = newNode;
     } else {
       Node newNode = new Node(element, worker.prev, worker);
       worker.prev.next = newNode;
-      worker.next.prev = newNode;
+      worker.prev = newNode;
     }
 
     size++;
@@ -96,7 +100,7 @@ public class DoublyLinkedList implements List {
 
   @Override
   public boolean addAll(Collection c) {
-    this.addAll(0, c);
+    this.addAll(size, c);
     return true;
   }
 
@@ -105,8 +109,8 @@ public class DoublyLinkedList implements List {
     isIndexInBounds(index);
 
     Object[] objects = c.toArray();
-    for (int i = 0; i < objects.length; i++) {
-      this.add(index + i, objects[i]);
+    for (int i = objects.length - 1; i >= 0; i--) {
+      this.add(index, objects[i]);
     }
     return true;
   }
@@ -146,7 +150,7 @@ public class DoublyLinkedList implements List {
     }
 
     if (this.isEmpty()) {
-      throw new ArrayIndexOutOfBoundsException();
+      throw new NullPointerException("Cannot remove element from empty collection.");
     }
 
     Object value = worker.value;
