@@ -1,5 +1,6 @@
 package ru.spbu.apcyb.svp.tasks.task2;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +28,7 @@ public class DoublyLinkedList implements List {
   }
 
   private void isIndexInBounds(int index) {
-    if (index > size && index < 0) {
+    if (index >= size || index < 0) {
       throw new IndexOutOfBoundsException();
     }
   }
@@ -64,23 +65,17 @@ public class DoublyLinkedList implements List {
   public void add(int index, Object element) {
     isIndexInBounds(index);
 
-    Node worker = head;
-    for (int i = 0; i < index; i++) {
-      worker = worker.next;
-    }
-
-    if (head == null) {
-      head = new Node(element, null, null);
-      tail = head;
-    } else if (worker == null) {
-      Node newNode = new Node(element, tail, null);
-      tail.next = newNode;
-      tail = newNode;
-    } else if (worker == head) {
-      Node newNode = new Node(element, null, worker);
-      worker.prev = newNode;
+    if (index == 0) {
+      Node newNode = new Node(element, null, head);
+      head.prev = newNode;
       head = newNode;
+
     } else {
+      Node worker = head;
+      for (int i = 0; i < index; i++) {
+        worker = worker.next;
+      }
+
       Node newNode = new Node(element, worker.prev, worker);
       worker.prev.next = newNode;
       worker.prev = newNode;
@@ -92,24 +87,36 @@ public class DoublyLinkedList implements List {
   @Override
   public boolean add(Object o) {
 
-    this.add(size, o);
+    if (head == null) {
+      head = new Node(o, null, null);
+      tail = head;
 
+    } else {
+
+      Node newNode = new Node(o, tail, null);
+      tail.next = newNode;
+      tail = newNode;
+    }
+
+    size++;
     return true;
   }
 
   @Override
   public boolean addAll(Collection c) {
-    this.addAll(size, c);
+
+    for (Object o : c) {
+      this.add(o);
+    }
     return true;
   }
 
   @Override
   public boolean addAll(int index, Collection c) {
-    isIndexInBounds(index);
 
     Object[] objects = c.toArray();
-    for (int i = objects.length - 1; i >= 0; i--) {
-      this.add(index, objects[i]);
+    for (int i = 0; i < objects.length; i++) {
+      this.add(index + i, objects[i]);
     }
     return true;
   }
@@ -121,11 +128,11 @@ public class DoublyLinkedList implements List {
 
   @Override
   public Object get(int index) {
-    isIndexInBounds(index);
 
     if (this.isEmpty()) {
       return null;
     }
+    isIndexInBounds(index);
 
     Node worker = head;
     for (int i = 0; i < index; i++) {
@@ -141,15 +148,16 @@ public class DoublyLinkedList implements List {
 
   @Override
   public Object remove(int index) {
-    isIndexInBounds(index);
-
-    Node worker = head;
-    for (int i = 0; i < index; i++) {
-      worker = worker.next;
-    }
 
     if (this.isEmpty()) {
       throw new NullPointerException("Cannot remove element from empty collection.");
+    }
+
+    isIndexInBounds(index);
+
+    Node worker = head;
+    for (int i = 1; i <= index; i++) {
+      worker = worker.next;
     }
 
     Object value = worker.value;
