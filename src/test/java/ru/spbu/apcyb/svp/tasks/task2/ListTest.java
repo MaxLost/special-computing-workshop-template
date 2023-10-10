@@ -80,6 +80,22 @@ class ListTest {
   }
 
   @Test
+  void addOnZeroIndex() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of("12", "333"));
+    list.add(0, "hello");
+    List<String> expected = List.of("hello", "12", "333");
+    for (int i = 0; i < expected.size(); i++) {
+      assertEquals(expected.get(i), list.get(i));
+    }
+  }
+
+  @Test
+  void addOnListSizeIndex() {
+    DoublyLinkedList list = new DoublyLinkedList(List.of("12", "333"));
+    assertThrows(IndexOutOfBoundsException.class, () -> list.add(list.size(), "hello"));
+  }
+
+  @Test
   void isListEmptyTest() {
     DoublyLinkedList list1 = new DoublyLinkedList();
     list1.add("123");
