@@ -151,30 +151,37 @@ public class DoublyLinkedList implements List {
     if (this.isEmpty()) {
       throw new NullPointerException("Cannot remove element from empty collection.");
     }
-
     isIndexInBounds(index);
 
-    Node worker = head;
-    for (int i = 1; i <= index; i++) {
-      worker = worker.next;
-    }
+    size--;
+    Object element;
 
-    Object value = worker.value;
-    if (size == 1) {
+    if (size == 0) {
+      element = head.value;
       head = null;
       tail = null;
-    } else if (worker == head) {
-      worker.next.prev = null;
-      head = worker.next;
-    } else if (worker == tail) {
-      worker.prev.next = null;
-      tail = worker.prev;
+
+    } else if (index == size) {
+      element = tail.value;
+      tail.prev.next = null;
+      tail = tail.prev;
+
+    } else if (index == 0) {
+      element = head.value;
+      head.next.prev = null;
+      head = head.next;
+
     } else {
+      Node worker = head;
+      for (int i = 0; i < index; i++) {
+        worker = worker.next;
+      }
+      element = worker.value;
       worker.prev.next = worker.next;
       worker.next.prev = worker.prev;
     }
-    size--;
-    return value;
+
+    return element;
   }
 
   @Override
