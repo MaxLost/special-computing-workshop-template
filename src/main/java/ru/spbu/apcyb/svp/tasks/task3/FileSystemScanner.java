@@ -6,10 +6,18 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Class for creating a snapshot of file system structure.
+ */
 public class FileSystemScanner {
 
   private final Directory root;
 
+  /**
+   * Creates scanner for a certain directory.
+   *
+   * @param path path of directory for which scanner will be created
+   */
   public FileSystemScanner(String path) {
 
     try {
@@ -21,12 +29,22 @@ public class FileSystemScanner {
     }
   }
 
+  /**
+   * Creates snapshot of a current file structure of certain directory.
+   *
+   * @return snapshot of a file structure
+   */
   public Directory scan() {
 
     root.scan();
     return root;
   }
 
+  /**
+   * Creates snapshot of a current file structure of certain directory and saves it as text in file.
+   *
+   * @param path specifies where to save a directory snapshot.
+   */
   public void scanToFile(String path) {
 
     try (FileWriter output = new FileWriter(path)) {
