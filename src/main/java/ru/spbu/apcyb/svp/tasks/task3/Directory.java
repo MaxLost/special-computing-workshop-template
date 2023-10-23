@@ -25,7 +25,7 @@ public class Directory {
    * This method scans directory and all of its subdirectories and records a snapshot of a file
    * system.
    */
-  public void scan() {
+  public void updateStructure() {
 
     try (Stream<Path> stream = Files.list(directoryPath)) {
 
@@ -39,7 +39,7 @@ public class Directory {
       }
 
       for (Directory subdir : subdirectories) {
-        subdir.scan();
+        subdir.updateStructure();
       }
 
     } catch (IOException e) {

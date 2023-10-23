@@ -36,7 +36,7 @@ public class FileSystemScanner {
    */
   public Directory scan() {
 
-    root.scan();
+    root.updateStructure();
     return root;
   }
 
@@ -49,7 +49,7 @@ public class FileSystemScanner {
 
     try (FileWriter output = new FileWriter(path)) {
 
-      root.scan();
+      root.updateStructure();
       output.write(root.directoryPath.toString());
       for (Directory subdir : root.subdirectories) {
         writeSubdirectoryToFile(subdir, output, 1);

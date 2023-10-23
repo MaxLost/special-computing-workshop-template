@@ -18,4 +18,27 @@ class FileSystemScannerTest {
     Directory result = new FileSystemScanner(directoryPath).scan();
     assertEquals(expected, result);
   }
+
+  @Test
+  void emptyDirectoryScanTest() {
+    String directoryPath = "src/test/resources/directoryScanTest/emptyDirectoryTest/";
+    Directory expected = new Directory(Path.of(directoryPath));
+
+    Directory result = new FileSystemScanner(directoryPath).scan();
+    assertEquals(expected, result);
+  }
+
+  @Test
+  void directoryScanTest() {
+    String directoryPath = "src/test/resources/directoryScanTest/";
+    Directory expected = new Directory(Path.of(directoryPath));
+    expected.subdirectories.add(new Directory(Paths.get(directoryPath + "directory1/")));
+    expected.subdirectories.add(new Directory(Paths.get(directoryPath + "emptyDirectoryTest/")));
+    Directory dir1 = expected.subdirectories.get(0);
+    dir1.files.add(Paths.get(dir1.directoryPath + "/1.cfg"));
+    dir1.files.add(Paths.get(dir1.directoryPath + "/1.txt"));
+
+    Directory result = new FileSystemScanner(directoryPath).scan();
+    assertEquals(expected, result);
+  }
 }
