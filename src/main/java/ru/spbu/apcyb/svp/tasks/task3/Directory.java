@@ -18,7 +18,7 @@ public class Directory {
 
   public Directory(Path path) {
 
-    this.directoryPath = path;
+    this.directoryPath = path.toAbsolutePath();
   }
 
   /**

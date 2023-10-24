@@ -2,6 +2,7 @@ package ru.spbu.apcyb.svp.tasks.task3;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,10 +23,13 @@ public class FileSystemScanner {
 
     try {
       Path startPath = Paths.get(path);
-      root = new Directory(startPath);
-
+      if (Files.isDirectory(startPath)) {
+        root = new Directory(startPath);
+      } else {
+        throw new InvalidPathException(path, "Passed string is not a valid path to directory.");
+      }
     } catch (InvalidPathException e) {
-      throw new RuntimeException("Passed string is not a valid path.");
+      throw new RuntimeException("Passed string is not a valid path to directory.");
     }
   }
 
@@ -47,15 +51,19 @@ public class FileSystemScanner {
    */
   public void scanToFile(String path) {
 
-    try (FileWriter output = new FileWriter(path)) {
+    String[] pathAsArray = root.directoryPath.toString()
+        .split("\\\\");
+    String fileName = pathAsArray[pathAsArray.length - 1] + "_file_structure.txt";
+
+    try (FileWriter output = new FileWriter(path + "/" + fileName)) {
 
       root.updateStructure();
-      output.write(root.directoryPath.toString());
+      output.write(root.directoryPath + "\n");
       for (Directory subdir : root.subdirectories) {
         writeSubdirectoryToFile(subdir, output, 1);
       }
       for (Path file : root.files) {
-        output.write(" " + file.getFileName().toString());
+        output.write("\t" + file.getFileName().toString() + "\n");
       }
 
     } catch (IOException e) {
@@ -68,12 +76,13 @@ public class FileSystemScanner {
 
     String base = "\t".repeat(identation);
 
-    output.write(root.directoryPath.toString());
+    String[] pathAsStringArray = root.directoryPath.toString().split("\\\\");
+    output.write(base + pathAsStringArray[pathAsStringArray.length - 1] + "\n");
     for (Directory subdir : root.subdirectories) {
       writeSubdirectoryToFile(subdir, output, identation + 1);
     }
     for (Path file : root.files) {
-      output.write(base + file.getFileName().toString());
+      output.write(base + "\t" + file.getFileName().toString() + "\n");
     }
   }
 

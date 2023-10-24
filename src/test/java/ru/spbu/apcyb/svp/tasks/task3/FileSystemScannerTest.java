@@ -1,9 +1,17 @@
 package ru.spbu.apcyb.svp.tasks.task3;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 class FileSystemScannerTest {
@@ -11,9 +19,10 @@ class FileSystemScannerTest {
   @Test
   void noSubdirectoriesScanTest() {
     String directoryPath = "src/test/resources/noSubdirectoriesTest/";
-    Directory expected = new Directory(Path.of(directoryPath));
-    expected.files.add(Paths.get(directoryPath + "1.txt"));
-    expected.files.add(Paths.get(directoryPath + "2.txt"));
+    Path path = Path.of(directoryPath).toAbsolutePath();
+    Directory expected = new Directory(path);
+    expected.files.add(Paths.get(path + "/1.txt"));
+    expected.files.add(Paths.get(path + "/2.txt"));
 
     Directory result = new FileSystemScanner(directoryPath).scan();
     assertEquals(expected, result);
@@ -32,6 +41,7 @@ class FileSystemScannerTest {
   void directoryScanTest() {
     String directoryPath = "src/test/resources/directoryScanTest/";
     Directory expected = new Directory(Path.of(directoryPath));
+    expected.files.add(Path.of(expected.directoryPath + "/2.ini"));
     expected.subdirectories.add(new Directory(Paths.get(directoryPath + "directory1/")));
     expected.subdirectories.add(new Directory(Paths.get(directoryPath + "emptyDirectoryTest/")));
     Directory dir1 = expected.subdirectories.get(0);
@@ -40,5 +50,40 @@ class FileSystemScannerTest {
 
     Directory result = new FileSystemScanner(directoryPath).scan();
     assertEquals(expected, result);
+  }
+
+  @Test
+  void invalidPathTest() {
+    String directoryPath = "it's just a string";
+
+    Exception e = assertThrows(RuntimeException.class, () -> new FileSystemScanner(directoryPath));
+    assertEquals("Passed string is not a valid path to directory.", e.getMessage());
+  }
+
+  @Test
+  void scanToFileTest() throws IOException {
+    String directoryPath = "src/test/resources/directoryScanTest/";
+    String pathToFile = "src/test/resources/expected.txt";
+
+    Path path = Path.of(directoryPath);
+
+    try (FileWriter output = new FileWriter(pathToFile)) {
+      output.write(path.toAbsolutePath() + "\n");
+      output.write("\tdirectory1\n");
+      output.write("\t\t1.cfg\n");
+      output.write("\t\t1.txt\n");
+      output.write("\temptyDirectoryTest\n");
+      output.write("\t2.ini\n");
+    }
+
+    new FileSystemScanner(directoryPath).scanToFile("src/test/resources/");
+
+    Path expectedPathToResult = Path.of(
+        path.toAbsolutePath() + "_file_structure.txt");
+    if (Files.notExists(expectedPathToResult)) {
+      fail("Cannot find result file at expected path.");
+    }
+
+    assertEquals(-1, Files.mismatch(Path.of(pathToFile), expectedPathToResult));
   }
 }
