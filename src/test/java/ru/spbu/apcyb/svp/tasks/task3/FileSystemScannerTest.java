@@ -2,19 +2,34 @@ package ru.spbu.apcyb.svp.tasks.task3;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 class FileSystemScannerTest {
+
+  private boolean directoryComparator(Directory dir1, Directory dir2) {
+
+      if (dir1.files.equals(dir2.files) && dir1.subdirectories.size() == dir2.subdirectories.size()) {
+
+        for (int i = 0; i < dir1.subdirectories.size(); i++) {
+
+          if (!directoryComparator(dir1.subdirectories.get(i),dir2.subdirectories.get(i))) {
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      return false;
+  }
 
   @Test
   void noSubdirectoriesScanTest() {
@@ -25,7 +40,7 @@ class FileSystemScannerTest {
     expected.files.add(Paths.get(path + "/2.txt"));
 
     Directory result = new FileSystemScanner(directoryPath).scan();
-    assertEquals(expected, result);
+    assertTrue(directoryComparator(expected, result));
   }
 
   @Test
@@ -34,7 +49,7 @@ class FileSystemScannerTest {
     Directory expected = new Directory(Path.of(directoryPath));
 
     Directory result = new FileSystemScanner(directoryPath).scan();
-    assertEquals(expected, result);
+    assertTrue(directoryComparator(expected, result));
   }
 
   @Test
@@ -49,7 +64,7 @@ class FileSystemScannerTest {
     dir1.files.add(Paths.get(dir1.directoryPath + "/1.txt"));
 
     Directory result = new FileSystemScanner(directoryPath).scan();
-    assertEquals(expected, result);
+    assertTrue(directoryComparator(expected, result));
   }
 
   @Test

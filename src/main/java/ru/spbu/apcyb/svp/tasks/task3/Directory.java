@@ -46,25 +46,4 @@ public class Directory {
       throw new RuntimeException("Directory scanning failed at:" + directoryPath.toString());
     }
   }
-
-  @Override
-  public boolean equals(Object obj) {
-
-    if (obj instanceof Directory dir && (this.directoryPath.equals(dir.directoryPath)
-        && this.files.equals(dir.files)
-        && this.subdirectories.size() == dir.subdirectories.size())) {
-
-      for (int i = 0; i < this.subdirectories.size(); i++) {
-
-        if (!this.subdirectories.get(i).equals(dir.subdirectories.get(i))) {
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    return false;
-  }
-
 }
