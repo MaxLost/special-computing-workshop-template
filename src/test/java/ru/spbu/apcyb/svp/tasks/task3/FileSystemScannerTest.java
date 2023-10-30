@@ -72,7 +72,8 @@ class FileSystemScannerTest {
     String directoryPath = "it's just a string";
 
     Exception e = assertThrows(RuntimeException.class, () -> new FileSystemScanner(directoryPath));
-    assertEquals("Passed string is not a valid path to directory.", e.getMessage());
+    assertEquals("Passed string is not a valid path to directory.: it's just a string",
+        e.getMessage());
   }
 
   @Test

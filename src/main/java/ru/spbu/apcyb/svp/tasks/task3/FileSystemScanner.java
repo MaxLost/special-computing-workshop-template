@@ -2,10 +2,7 @@ package ru.spbu.apcyb.svp.tasks.task3;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Class for creating a snapshot of file system structure.
@@ -21,16 +18,7 @@ public class FileSystemScanner {
    */
   public FileSystemScanner(String path) {
 
-    try {
-      Path startPath = Paths.get(path);
-      if (Files.isDirectory(startPath)) {
-        root = new Directory(startPath);
-      } else {
-        throw new InvalidPathException(path, "Passed string is not a valid path to directory.");
-      }
-    } catch (InvalidPathException e) {
-      throw new RuntimeException("Passed string is not a valid path to directory.");
-    }
+    this.root = new Directory(path);
   }
 
   /**
