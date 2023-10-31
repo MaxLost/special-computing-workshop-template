@@ -9,29 +9,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
 class FileSystemScannerTest {
 
-  private boolean directoryComparator(Directory dir1, Directory dir2) {
-
-      if (dir1.files.equals(dir2.files) && dir1.subdirectories.size() == dir2.subdirectories.size()) {
-
-        for (int i = 0; i < dir1.subdirectories.size(); i++) {
-
-          if (!directoryComparator(dir1.subdirectories.get(i),dir2.subdirectories.get(i))) {
-            return false;
-          }
-        }
-
-        return true;
-      }
-
-      return false;
-  }
-
-  @Test
+  /*@Test
   void noSubdirectoriesScanTest() {
     String directoryPath = "src/test/resources/noSubdirectoriesTest/";
     Path path = Path.of(directoryPath).toAbsolutePath();
@@ -65,6 +47,26 @@ class FileSystemScannerTest {
 
     Directory result = new FileSystemScanner(directoryPath).scan();
     assertTrue(directoryComparator(expected, result));
+  }*/
+
+  @Test
+  void noSubdirectoriesScanTest() throws IOException {
+    String directoryPath = "src/test/resources/noSubdirectoriesTest/";
+    String pathToFile = "src/test/resources/noSubdirectoriesTest_expected.txt";
+
+    Path path = Path.of(directoryPath);
+
+    try (FileWriter output = new FileWriter(pathToFile)) {
+      output.write(path.toAbsolutePath() + "\n");
+      output.write("\t1.txt\n");
+      output.write("\t2.txt\n");
+    }
+
+    new FileSystemScanner(directoryPath).scanToFile("src/test/resources");
+
+    Path expectedPathToResult = Path.of(
+        path.toAbsolutePath() + "_file_structure.txt");
+    assertEquals(-1, Files.mismatch(Path.of(pathToFile), expectedPathToResult));
   }
 
   @Test
@@ -77,9 +79,9 @@ class FileSystemScannerTest {
   }
 
   @Test
-  void scanToFileTest() throws IOException {
+  void directoryScanTest() throws IOException {
     String directoryPath = "src/test/resources/directoryScanTest/";
-    String pathToFile = "src/test/resources/expected.txt";
+    String pathToFile = "src/test/resources/directoryScanTest_expected.txt";
 
     Path path = Path.of(directoryPath);
 
@@ -102,4 +104,27 @@ class FileSystemScannerTest {
 
     assertEquals(-1, Files.mismatch(Path.of(pathToFile), expectedPathToResult));
   }
+
+  @Test
+  void emptyDirectoryScanTest() throws IOException {
+    String directoryPath = "src/test/resources/directoryScanTest/emptyDirectoryTest/";
+    String pathToFile = "src/test/resources/emptyDirectoryTest_expected.txt";
+
+    Path path = Path.of(directoryPath);
+
+    try (FileWriter output = new FileWriter(pathToFile)) {
+      output.write(path.toAbsolutePath() + "\n");
+    }
+
+    new FileSystemScanner(directoryPath).scanToFile("src/test/resources/");
+
+    Path expectedPathToResult = Path.of(
+        Path.of("src/test/resources/emptyDirectoryTest").toAbsolutePath() + "_file_structure.txt");
+    if (Files.notExists(expectedPathToResult)) {
+      fail("Cannot find result file at expected path.");
+    }
+
+    assertEquals(-1, Files.mismatch(Path.of(pathToFile), expectedPathToResult));
+  }
+
 }

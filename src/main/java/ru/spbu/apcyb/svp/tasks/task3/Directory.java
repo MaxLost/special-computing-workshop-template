@@ -1,5 +1,6 @@
 package ru.spbu.apcyb.svp.tasks.task3;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
@@ -15,8 +16,6 @@ import java.util.stream.Stream;
 public class Directory {
 
   Path directoryPath;
-  List<Path> files = new ArrayList<>();
-  List<Directory> subdirectories = new ArrayList<>();
 
   /**
    * Constructs directory on base of path as a string.
@@ -53,24 +52,36 @@ public class Directory {
 
   /**
    * This method scans directory and all of its subdirectories and records a snapshot of a file
-   * system.
+   * system into string.
    */
-  public void updateStructure() {
+  public String updateStructure(boolean isRoot, int identation) {
 
     try (Stream<Path> stream = Files.list(directoryPath)) {
 
+      StringBuilder str = new StringBuilder();
+      String baseIdentation = "\t".repeat(identation + 1);
+
+      if (isRoot) {
+        str.append(directoryPath).append("\n");
+      }
+
       List<Path> content = stream.toList();
+      List<Path> files = new ArrayList<>();
+
       for (Path file : content) {
         if (Files.isDirectory(file)) {
-          subdirectories.add(new Directory(file));
+          str.append(baseIdentation).append(file.getFileName()).append("\n");
+          str.append(new Directory(file).updateStructure(false, identation + 1));
         } else {
           files.add(file);
         }
       }
 
-      for (Directory subdir : subdirectories) {
-        subdir.updateStructure();
+      for (Path file : files) {
+        str.append(baseIdentation).append(file.getFileName()).append("\n");
       }
+
+      return str.toString();
 
     } catch (IOException e) {
       throw new RuntimeException("Directory scanning failed at:" + directoryPath.toString());
