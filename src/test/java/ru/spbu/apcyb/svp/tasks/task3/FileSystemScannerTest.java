@@ -51,8 +51,8 @@ class FileSystemScannerTest {
 
   @Test
   void noSubdirectoriesScanTest() throws IOException {
-    String directoryPath = "src/test/resources/noSubdirectoriesTest/";
-    String pathToFile = "src/test/resources/noSubdirectoriesTest_expected.txt";
+    String directoryPath = "src/test/resources/task3/noSubdirectoriesTest/";
+    String pathToFile = "src/test/resources/task3/noSubdirectoriesTest_expected.txt";
 
     Path path = Path.of(directoryPath);
 
@@ -62,7 +62,7 @@ class FileSystemScannerTest {
       output.write("\t2.txt\n");
     }
 
-    new FileSystemScanner(directoryPath).scanToFile("src/test/resources");
+    new FileSystemScanner(directoryPath).scanToFile("src/test/resources/task3/");
 
     Path expectedPathToResult = Path.of(
         path.toAbsolutePath() + "_file_structure.txt");
@@ -80,8 +80,8 @@ class FileSystemScannerTest {
 
   @Test
   void directoryScanTest() throws IOException {
-    String directoryPath = "src/test/resources/directoryScanTest/";
-    String pathToFile = "src/test/resources/directoryScanTest_expected.txt";
+    String directoryPath = "src/test/resources/task3/directoryScanTest/";
+    String pathToFile = "src/test/resources/task3/directoryScanTest_expected.txt";
 
     Path path = Path.of(directoryPath);
 
@@ -94,7 +94,7 @@ class FileSystemScannerTest {
       output.write("\t2.ini\n");
     }
 
-    new FileSystemScanner(directoryPath).scanToFile("src/test/resources/");
+    new FileSystemScanner(directoryPath).scanToFile("src/test/resources/task3/");
 
     Path expectedPathToResult = Path.of(
         path.toAbsolutePath() + "_file_structure.txt");
@@ -107,8 +107,8 @@ class FileSystemScannerTest {
 
   @Test
   void emptyDirectoryScanTest() throws IOException {
-    String directoryPath = "src/test/resources/directoryScanTest/emptyDirectoryTest/";
-    String pathToFile = "src/test/resources/emptyDirectoryTest_expected.txt";
+    String directoryPath = "src/test/resources/task3/directoryScanTest/emptyDirectoryTest/";
+    String pathToFile = "src/test/resources/task3/emptyDirectoryTest_expected.txt";
 
     Path path = Path.of(directoryPath);
 
@@ -116,10 +116,10 @@ class FileSystemScannerTest {
       output.write(path.toAbsolutePath() + "\n");
     }
 
-    new FileSystemScanner(directoryPath).scanToFile("src/test/resources/");
+    new FileSystemScanner(directoryPath).scanToFile("src/test/resources/task3/");
 
     Path expectedPathToResult = Path.of(
-        Path.of("src/test/resources/emptyDirectoryTest").toAbsolutePath() + "_file_structure.txt");
+        Path.of("src/test/resources/task3/emptyDirectoryTest").toAbsolutePath() + "_file_structure.txt");
     if (Files.notExists(expectedPathToResult)) {
       fail("Cannot find result file at expected path.");
     }
