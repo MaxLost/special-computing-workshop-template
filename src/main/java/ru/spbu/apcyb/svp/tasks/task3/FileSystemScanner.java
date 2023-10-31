@@ -2,7 +2,6 @@ package ru.spbu.apcyb.svp.tasks.task3;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 
 /**
  * Class for creating a snapshot of file system structure.
