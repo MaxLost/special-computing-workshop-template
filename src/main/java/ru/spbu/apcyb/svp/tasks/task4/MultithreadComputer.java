@@ -1,8 +1,6 @@
 package ru.spbu.apcyb.svp.tasks.task4;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
@@ -13,14 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.stream.Stream;
 
 public class MultithreadComputer {
 
@@ -62,7 +55,7 @@ public class MultithreadComputer {
           Duration.between(startSingle, endSingle).toMillis());
 
       Instant startMulti = Instant.now();
-      List<Double> resultMulti = computeTanMultiThread(numbers, 6);
+      List<Double> resultMulti = computeTanMultiThread(numbers, 5);
       Instant endMulti = Instant.now();
       writeResultInFile(multiOutputPath, resultMulti);
 
@@ -103,7 +96,18 @@ public class MultithreadComputer {
     ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
 
     try {
-      Stream<Future<Double>> futures = executorService.invokeAll(
+      List<Future<Double>> futures = new ArrayList<>();
+      for (Double x : numbers) {
+        futures.add(executorService.submit(new TanComputer(x)));
+      }
+
+      List<Double> result = new ArrayList<>();
+      for (Future<Double> f : futures) {
+        result.add(f.get());
+      }
+
+      return result;
+      /*Stream<Future<Double>> futures = executorService.invokeAll(
           numbers.stream().map(TanComputer::new).toList()).stream();
 
       return futures.map(doubleFuture -> {
@@ -112,7 +116,7 @@ public class MultithreadComputer {
         } catch (Exception e) {
           throw new RuntimeException(e);
         }
-      }).toList();
+      }).toList();*/
 
     } catch (Exception e) {
       throw new RuntimeException(e);
