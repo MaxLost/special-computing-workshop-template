@@ -42,6 +42,8 @@ public class MultiThreadComputer {
 
     } catch (InvalidPathException e) {
       throw new IllegalArgumentException(e.getMessage());
+    } catch (Exception e) {
+      System.out.println("Multi-thread computation was interrupted. Please try again.");
     }
   }
 
@@ -80,13 +82,19 @@ public class MultiThreadComputer {
     System.out.printf("Time spent on calculation with single thread: %d ms%n",
         Duration.between(startSingle, endSingle).toMillis());
 
-    Instant startMulti = Instant.now();
-    List<Double> resultMulti = computeTanMultiThread(numbers, 4);
-    Instant endMulti = Instant.now();
-    writeResultInFile(multiOutputPath, resultMulti);
+    try {
+      Instant startMulti = Instant.now();
 
-    System.out.printf("Time spent on calculation with multiple threads: %d ms%n",
-        Duration.between(startMulti, endMulti).toMillis());
+      List<Double> resultMulti = computeTanMultiThread(numbers, 4);
+
+      Instant endMulti = Instant.now();
+      writeResultInFile(multiOutputPath, resultMulti);
+
+      System.out.printf("Time spent on calculation with multiple threads: %d ms%n",
+          Duration.between(startMulti, endMulti).toMillis());
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 
   private static List<Double> readValuesFromFile(Path inputPath) {
@@ -142,7 +150,8 @@ public class MultiThreadComputer {
    * @param threadCount number of parallel threads
    * @return list of computed tangents
    */
-  public static List<Double> computeTanMultiThread(List<Double> values, int threadCount) {
+  public static List<Double> computeTanMultiThread(List<Double> values, int threadCount)
+      throws Exception {
 
     ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
 
@@ -151,9 +160,6 @@ public class MultiThreadComputer {
           () -> values.parallelStream().map(Math::tan).toList());
 
       return futures.get();
-
-    } catch (Exception e) {
-      throw new RuntimeException(e);
 
     } finally {
       executorService.shutdownNow();
