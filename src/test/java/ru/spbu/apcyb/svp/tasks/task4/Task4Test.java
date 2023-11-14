@@ -8,10 +8,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
-public class Task4Test {
+class Task4Test {
 
   @Test
-  void perfomanceTest() {
+  void performanceTest() {
 
     System.out.println("Calculation of 1 tan(x):");
     String oneInput = "src/test/resources/task4/numbers_1.txt";

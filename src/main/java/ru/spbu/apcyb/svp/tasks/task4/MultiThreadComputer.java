@@ -48,7 +48,7 @@ public class MultiThreadComputer {
   }
 
   /**
-   * Method for logging perfomance of single and multi thread calculation of tangents.
+   * Method for logging performance of single and multi thread calculation of tangents.
    *
    * @param input file with input values
    * @param singleOutput file for single-thread output
