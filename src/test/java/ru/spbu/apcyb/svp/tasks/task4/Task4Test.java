@@ -18,14 +18,14 @@ class Task4Test {
     String oneSingleOut = "src/test/resources/task4/results_1_S.txt";
     String oneMultiOut = "src/test/resources/task4/results_1_M.txt";
 
-    MultiThreadComputer.computeTangentsWithPerfomanceLog(oneInput, oneSingleOut, oneMultiOut);
+    MultiThreadComputer.computeTangentsWithPerformanceLog(oneInput, oneSingleOut, oneMultiOut);
 
     System.out.println("Calculation of 100 tan(x):");
     String hundredInput = "src/test/resources/task4/numbers_100.txt";
     String hundredSingleOut = "src/test/resources/task4/results_100_S.txt";
     String hundredMultiOut = "src/test/resources/task4/results_100_M.txt";
 
-    MultiThreadComputer.computeTangentsWithPerfomanceLog(hundredInput, hundredSingleOut,
+    MultiThreadComputer.computeTangentsWithPerformanceLog(hundredInput, hundredSingleOut,
         hundredMultiOut);
 
     System.out.println("Calculation of 1000000 tan(x):");
@@ -33,7 +33,7 @@ class Task4Test {
     String mullionSingleOut = "src/test/resources/task4/results_1000000_S.txt";
     String mullionMultiOut = "src/test/resources/task4/results_1000000_M.txt";
 
-    MultiThreadComputer.computeTangentsWithPerfomanceLog(mullionInput, mullionSingleOut,
+    MultiThreadComputer.computeTangentsWithPerformanceLog(mullionInput, mullionSingleOut,
         mullionMultiOut);
     assertTrue(true);
   }
@@ -46,7 +46,7 @@ class Task4Test {
     String hundredSingleOut = "src/test/resources/task4/results_100_S.txt";
     String hundredMultiOut = "src/test/resources/task4/results_100_M.txt";
 
-    MultiThreadComputer.computeTangentsWithPerfomanceLog(hundredInput, hundredSingleOut,
+    MultiThreadComputer.computeTangentsWithPerformanceLog(hundredInput, hundredSingleOut,
         hundredMultiOut);
 
     Path singleThreadResult = Path.of(hundredSingleOut);

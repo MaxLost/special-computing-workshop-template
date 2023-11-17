@@ -8,16 +8,21 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Class for multi-thread computing of tangents.
  */
 public class MultiThreadComputer {
+
+  private static final Logger logger = Logger.getLogger("Multi.thread.computer");
 
   /**
    * Method that reads values from one file and then computes and writes tangents of given values
@@ -42,8 +47,12 @@ public class MultiThreadComputer {
 
     } catch (InvalidPathException e) {
       throw new IllegalArgumentException(e.getMessage());
+
     } catch (Exception e) {
-      System.out.println("Multi-thread computation was interrupted. Please try again.");
+      String stackTrace = Arrays.stream(e.getStackTrace())
+          .map(StackTraceElement::toString)
+          .collect(Collectors.joining("\n"));
+      logger.severe("One of the threads was interrupted at:\n" + stackTrace);
     }
   }
 
@@ -54,7 +63,7 @@ public class MultiThreadComputer {
    * @param singleOutput file for single-thread output
    * @param multiOutput file for multi-thread output
    */
-  public static void computeTangentsWithPerfomanceLog(String input, String singleOutput,
+  public static void computeTangentsWithPerformanceLog(String input, String singleOutput,
       String multiOutput) {
 
     try {
@@ -62,14 +71,14 @@ public class MultiThreadComputer {
       Path singleOutputPath = Path.of(singleOutput);
       Path multiOutputPath = Path.of(multiOutput);
 
-      computeTangentsWithPerfomanceLogs(inputPath, singleOutputPath, multiOutputPath);
+      computeTangentsWithPerformanceLogs(inputPath, singleOutputPath, multiOutputPath);
 
     } catch (InvalidPathException e) {
       throw new IllegalArgumentException(e.getMessage());
     }
   }
 
-  private static void computeTangentsWithPerfomanceLogs(Path inputPath, Path singleOutputPath,
+  private static void computeTangentsWithPerformanceLogs(Path inputPath, Path singleOutputPath,
       Path multiOutputPath) {
 
     List<Double> numbers = readValuesFromFile(inputPath);
