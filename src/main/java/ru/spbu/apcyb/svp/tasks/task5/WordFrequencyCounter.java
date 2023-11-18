@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
@@ -54,6 +56,7 @@ public class WordFrequencyCounter {
   private static void writeResultInFile(Path outputPath, Map<String, Long> words) {
 
     ExecutorService executorService = Executors.newFixedThreadPool(8);
+    List<CompletableFuture<Void>> futures = new ArrayList<>();
 
     try (BufferedWriter output = Files.newBufferedWriter(outputPath)) {
 
@@ -70,20 +73,23 @@ public class WordFrequencyCounter {
         output.write(result);
 
         Path wordFilePath = Path.of(pathBase + File.separator + word.getKey() + ".txt");
-        writeWordToSeparateFile(wordFilePath, word.getKey(), word.getValue());
+        futures.add(
+            writeWordToSeparateFile(wordFilePath, word.getKey(), word.getValue(), executorService));
       }
 
     } catch (IOException e) {
       throw new RuntimeException(e.getMessage());
 
     } finally {
+      futures.forEach(CompletableFuture::join);
       executorService.shutdown();
     }
   }
 
-  private static void writeWordToSeparateFile(Path path, String word, Long repetitions) {
+  private static CompletableFuture<Void> writeWordToSeparateFile(Path path, String word, Long repetitions,
+      ExecutorService executorService) {
 
-    CompletableFuture.runAsync(() -> {
+    return CompletableFuture.runAsync(() -> {
 
       try (BufferedWriter wordFile = Files.newBufferedWriter(path)) {
         for (int i = 0; i < repetitions; i++) {
@@ -96,7 +102,7 @@ public class WordFrequencyCounter {
             .collect(Collectors.joining("\n"));
         logger.severe("Cannot open file for word.\n" + stackTrace);
       }
-    });
+    }, executorService);
   }
 
   private static Map<String, Long> countWords(Path inputPath) {

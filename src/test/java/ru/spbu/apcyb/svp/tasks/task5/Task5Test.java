@@ -34,4 +34,12 @@ class Task5Test {
     assertEquals("Incorrect amount of arguments, check specification of program.", e.getMessage());
   }
 
+  @Test
+  void hugeFileTest() {
+    String[] args = new String[]{"src/test/resources/task5/huge_file.txt",
+        "src/test/resources/task5/huge_file_result.txt"};
+    WordFrequencyCounter.main(args);
+    assertTrue(Files.exists(Path.of("src/test/resources/task5/huge_file_result/")));
+  }
+
 }
