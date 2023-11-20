@@ -1,0 +1,4 @@
+aaa 3
+bb 1
+bbb 2
+cccc 1
