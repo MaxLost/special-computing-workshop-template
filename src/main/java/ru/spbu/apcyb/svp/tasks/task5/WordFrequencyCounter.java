@@ -21,12 +21,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Class for
+ * Class for getting word frequencies in text and saving result to file.
  */
 public class WordFrequencyCounter {
 
   private static final Logger logger = Logger.getLogger("Word.frequency.counter");
 
+  /**
+   * Main method for getting word frequencies from file.
+   *
+   * @param args First argument - path to file with text for getting word frequencies.
+   *             Second argument - path to file where result should be saved.
+   */
   public static void main(String[] args) {
 
     if (args.length != 2) {
