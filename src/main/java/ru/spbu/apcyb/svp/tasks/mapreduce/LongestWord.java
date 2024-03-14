@@ -60,7 +60,7 @@ public class LongestWord {
 
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
-        Job job = Job.getInstance(conf, "Length count");
+        Job job = Job.getInstance(conf, "Longest word");
         job.setJarByClass(LongestWord.class);
         job.setMapperClass(TokenizerMapper.class);
         job.setReducerClass(WordReducer.class);
